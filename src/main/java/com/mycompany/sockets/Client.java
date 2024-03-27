@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 public class Client {
     public static void main(String[] args) throws IOException{
         try{
-            Socket cliente = new Socket("localhost", 12346);
+            Socket cliente = new Socket("localhost", 12345);
             //lendo mensagens do servidor
             new Thread(){
                 @Override

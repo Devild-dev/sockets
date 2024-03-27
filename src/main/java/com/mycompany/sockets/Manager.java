@@ -9,17 +9,19 @@ import java.util.ArrayList;
 //estende a classe Thread para conectar mais de um cliente
 public class Manager extends Thread{
     private Socket cliente;
-    private String nomeCliente;
-    
-    //criar uma array do tipo agenda
-    Agenda a = new Agenda("Davi","davi@email.com","71999999999");
-    Agenda b = new Agenda("Joao","joao@gmail.com","75988888888");
-    Agenda c = new Agenda("Maria","maria@gmail.com","73977777777");
         
+    //criar uma array do tipo agenda
+         
     ArrayList<Agenda> ListaAgenda = new ArrayList<Agenda>();
     Agenda agenda = new Agenda(null,null,null);
     String opc;        
     String sair = "0";
+    
+    //Preenche o array para testes
+    Agenda a = new Agenda("Davi","davi@email.com","71999999999");
+    Agenda b = new Agenda("Joao","joao@gmail.com","75988888888");
+    Agenda c = new Agenda("Maria","maria@gmail.com","73977777777");
+    
     
     public Manager(Socket cliente){
         this.cliente = cliente;
@@ -32,77 +34,127 @@ public class Manager extends Thread{
          ListaAgenda.add(1,b);
          ListaAgenda.add(2,c);
         try{
-            //lê as mensagens do cliente
             BufferedReader buffer = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-            //escreve as mensagens
             PrintWriter print = new PrintWriter(cliente.getOutputStream(), true);
             
-            print.println("Digite o nome, e-mail ou número desejado para consulta:");
-            
-            Agenda mensagem = new Agenda(null,null,null);
-            
             do{
-                print.println("----------------------------------------------");
-                print.println("| Digite 1 para procurar pelo nome           |");
-                print.println("----------------------------------------------");
-                print.println("----------------------------------------------");
-                print.println("| Digite 2 para procurar pelo e-mail         |");
-                print.println("----------------------------------------------");
-                print.println("----------------------------------------------");
-                print.println("| Digite 3 para procurar pelo Nº do Celular  |");
-                print.println("----------------------------------------------");
-            
+                print.println("-------------------------------------------------------------");
+                print.println("| Digite 1 para procurar pelo nome                          |");
+                print.println("-------------------------------------------------------------");
+                print.println("-------------------------------------------------------------");
+                print.println("| Digite 2 para procurar pelo e-mail                        |");
+                print.println("-------------------------------------------------------------");
+                print.println("-------------------------------------------------------------");
+                print.println("| Digite 3 para procurar pelo Nº do Celular                 |");
+                print.println("-------------------------------------------------------------");
+                print.println("-------------------------------------------------------------");
+                print.println("| Digite 4 p/ nome, e-mail ou número desejado para consulta:|");
+                print.println("-------------------------------------------------------------");    
+                             
             opc = buffer.readLine();
             String msg;    
                 switch(opc){
                     case "1":
                         print.println("Digite o nome");
-                        mensagem.setNome(buffer.readLine());
-                        mensagem.setEmail(null);
-                        mensagem.setCelular(null);
-                        print.println("Teste 1"+ mensagem.getNome());
-                        print.println("Teste 1"+ mensagem.getEmail());
-                        print.println("Teste 1"+ mensagem.getCelular());
+                        msg = buffer.readLine();
+                        agenda = verificaNome(ListaAgenda, msg);
                         break;
                     case "2":
                         print.println("Digite o e-mail");
-                        mensagem.setEmail(buffer.readLine());
-                        mensagem.setNome(null);
-                        mensagem.setCelular(null);
-                        print.println("Teste 2"+ mensagem.getNome());
-                        print.println("Teste 2"+ mensagem.getEmail());
-                        print.println("Teste 2"+ mensagem.getCelular());
+                        msg = buffer.readLine();
+                        agenda = verificaEmail(ListaAgenda, msg);
                         break;
                     case "3":
                         print.println("Digite o Nº do celular");
-                        mensagem.setCelular(buffer.readLine()); 
-                        mensagem.setNome(null);
-                        mensagem.setCelular(null);
-                        print.println("Teste 3"+ mensagem.getNome());
-                        print.println("Teste 3"+ mensagem.getEmail());
-                        print.println("Teste 3"+ mensagem.getCelular());
+                        msg = buffer.readLine();
+                        agenda = verificaCelular(ListaAgenda, msg);
+                        break;
+                    case "4":
+                        print.println("Digite algum dado para encontrar");
+                        msg = buffer.readLine();
+                        agenda = verificaFull(ListaAgenda, msg);
                         break;
                     default:
                         print.println("\nValor inválido, tente novamente!\n");
-                    } 
-                while(true){
-                    if (mensagem.getNome().equals("Davi")) {
-                        print.println("Nome: " + ListaAgenda.get(0).getNome() + "\nE-mail: " + ListaAgenda.get(0).getEmail() + "\nCelular: " + ListaAgenda.get(0).getCelular());
-                    } else if (mensagem.getNome().equals("Joao")) {
-                        print.println("Nome: " + ListaAgenda.get(1).getNome() + "\nE-mail: " + ListaAgenda.get(1).getEmail() + "\nCelular: " + ListaAgenda.get(1).getCelular());
-                    } else if ((mensagem.getNome().equals("Maria"))) {
-                        print.println("Nome: " + ListaAgenda.get(2).getNome() + "\nE-mail: " + ListaAgenda.get(2).getEmail() + "\nCelular: " + ListaAgenda.get(2).getCelular());
-                    } else {
-                        print.println("Nome desconhecido");
                     }
+                while(true){
+                    print.println(agenda.getNome()+"\n"+agenda.getEmail()+"\n"+agenda.getCelular()+"\n");
                     break;
                 }
-        }while(sair != "1");
+            }while(sair != "1");
             
         }catch(Exception e){
             System.out.println("Erro: " + e.getMessage());
         }   
     }
+
+    public Agenda verificaNome(ArrayList<Agenda> AgendaList, String s) {
+        Agenda a = new Agenda(null, null, null);
+
+        for (int i = 0; i < AgendaList.size(); i++) {
+            if (AgendaList.get(i).getNome().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else {
+                a.setNome("Nome não encontrado");
+                a.setCelular("Nº não encontrado");
+                a.setEmail("E-mail não encontrado");
+            }
+        }
+        return a;
+    }
+
+    public Agenda verificaEmail(ArrayList<Agenda> AgendaList, String s) {
+        Agenda a = new Agenda(null, null, null);
+
+        for (int i = 0; i < AgendaList.size(); i++) {
+            if (AgendaList.get(i).getEmail().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else {
+                a.setNome("Nome não encontrado");
+                a.setCelular("Nº não encontrado");
+                a.setEmail("E-mail não encontrado");
+            }
+        }
+        return a;
+    }
+
+    public Agenda verificaCelular(ArrayList<Agenda> AgendaList, String s) {
+        Agenda a = new Agenda(null, null, null);
+
+        for (int i = 0; i < AgendaList.size(); i++) {
+            if (AgendaList.get(i).getCelular().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else {
+                a.setNome("Nome não encontrado");
+                a.setCelular("Nº não encontrado");
+                a.setEmail("E-mail não encontrado");
+            }
+        }
+        return a;
+    }
+
+    public Agenda verificaFull(ArrayList<Agenda> AgendaList, String s) {
+        Agenda a = new Agenda(null, null, null);
+
+        for (int i = 0; i < AgendaList.size(); i++) {
+            if (AgendaList.get(i).getNome().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else if (AgendaList.get(i).getEmail().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else if (AgendaList.get(i).getCelular().equalsIgnoreCase(s)) {
+                a = AgendaList.get(i);
+                break;
+            } else {
+                a.setNome("Nome não encontrado");
+                a.setCelular("Nº não encontrado");
+                a.setEmail("E-mail não encontrado");
+            }
+        }
+        return a;
+    }
 }
-
-

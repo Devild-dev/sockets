@@ -13,8 +13,8 @@ public class Server {
         
         try{
             //instancia o serverSocket ouvindo a porta 12345
-            server = new ServerSocket(12346); 
-            System.out.println("servidor iniciado na porta 12346");
+            server = new ServerSocket(12345); 
+            System.out.println("servidor iniciado na porta 12345");
             
             while(true){
              //o método accept() bloqueia a execução até que o servidor receba uma solicitação de conexã pelo cliente*/
