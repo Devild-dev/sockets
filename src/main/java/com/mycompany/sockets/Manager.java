@@ -11,7 +11,6 @@ public class Manager extends Thread{
     private Socket cliente;
         
     //criar uma array do tipo agenda
-         
     ArrayList<Agenda> ListaAgenda = new ArrayList<Agenda>();
     Agenda agenda = new Agenda(null,null,null);
     String opc;        
