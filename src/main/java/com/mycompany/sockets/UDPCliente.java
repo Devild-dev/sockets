@@ -8,8 +8,7 @@ public class UDPCliente {
     public static void main(String[] args){
         
         try{
-            Scanner read = new Scanner(System.in);
-            
+            Scanner read = new Scanner(System.in); 
             DatagramSocket client = new DatagramSocket();
             InetAddress add = InetAddress.getByName("localhost");
             
@@ -21,11 +20,11 @@ public class UDPCliente {
             a = read.nextInt();
             System.out.println("Digite outro número");
             b = read.nextInt();
-            soma = a + b;
+            //soma = a + b;
+            soma = Soma(a,b);
             
             String str = soma + "";
             System.out.println("Soma igual a: "+ soma);
-            
             
             byte[] buf = str.getBytes();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, add, 12346);
@@ -34,5 +33,30 @@ public class UDPCliente {
         }catch(IOException e){
             System.out.println("Erro: " + e);
         }
+    }
+    
+    public static int Soma(int a, int b){
+        int c;
+        c = a+b;
+        return c;
+    }
+    public static int Subtracao(int a, int b){
+        int c;
+        c = a-b;
+        return c;
+    }
+    public static int Multiplicacao(int a, int b){
+        int c;
+        c = a*b;
+        return c;
+    }
+    public static int Divisao(int a, int b){
+        int c;
+        if(a>b){
+           c = a/b;
+        }else{
+            c = b/a;
+        }
+        return c;
     }
 }
